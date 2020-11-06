@@ -16,7 +16,7 @@ let path = {
     ],
     dest: 'dist/asset/css/'
   },
-  sass: {
+  scss: {
     src: [
       'src/sass/*.scss',
       'src/sass/**/*.scss'
@@ -50,13 +50,13 @@ function styles() {
     .pipe(dest(path.style.dest))
 }
 
-function sass() {
-  return src(path.sass.src, {sourcemaps: true})
+function scss() {
+  return src(path.scss.src, {sourcemaps: true})
     .pipe(sass().on('error', sass.logError))
     .pipe(concat('styles.css', {newLine: ''}))
     .pipe(cleancss())
     .pipe(rename({suffix: '.min'}))
-    .pipe(dest(path.style.dest, {sourcemaps: '.'}))
+    .pipe(dest(path.scss.dest, {sourcemaps: '.'}))
 }
 
 function scripts() {
@@ -81,7 +81,7 @@ function fonts() {
 
 function watcher () {
   watch(path.style.src, {ignoreInitial: false}, styles)
-  watch(path.sass.src, {ignoreInitial: false}, sass)
+  watch(path.scss.src, {ignoreInitial: false}, sass)
   watch(path.scripts.src, {ignoreInitial: false}, scripts)
   watch(path.images.src, {ignoreInitial: false}, images)
   watch(path.fonts.src, {ignoreInitial: false}, fonts)
@@ -92,12 +92,12 @@ function browserSync() {
     watch: true,
     server: { baseDir: "./" },
     port: 3000,
-    files: [path.scripts.dest, path.sass.dest, path.styles.dest]
+    files: [path.scripts.dest, path.scss.dest, path.style.dest]
 })
 }
 
 module.exports = {
   watch: parallel(browserSync, series(clean, watcher)),
-  build: series(clean, parallel(sass, styles, scripts, images, fonts)),
+  build: series(clean, parallel(scss, styles, scripts, images, fonts)),
   clean
 }
