@@ -22,12 +22,12 @@ let path = {
     src: [
       'node_modules/jquery/dist/jquery.min.js',
       'node_modules/bootstrap/dist/js/bootstrap.min.js',
-      'src/asset/js/**/*.js'
+      'src/js/**/*.js'
     ],
     dest: 'dist/asset/js'
   },
   images: {
-    src: ['src/asset/img/*'],
+    src: ['src/img/*'],
     dest: 'dist/asset/img'
   },
   fonts: {

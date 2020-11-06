@@ -1,6 +1,9 @@
+// plugins
+@import '../../node_modules/rfs/scss.scss';
+
 // utils
-@import './utils/fonts.scss';
-@import './utils/variables.scss';
+@import './utils/fonts';
+@import './utils/variables';
 
 // core
 
@@ -9,6 +12,3 @@
 
 
 // layout
-
-
-// pages
