@@ -13,6 +13,11 @@ let path = {
   style: {
     src: [
       'node_modules/bootstrap/dist/css/bootstrap.min.css',
+    ],
+    dest: 'dist/asset/css/'
+  },
+  sass: {
+    src: [
       'src/sass/*.scss',
       'src/sass/**/*.scss'
     ],
@@ -41,7 +46,12 @@ function clean () {
 }
 
 function styles() {
-  return src(path.style.src, {sourcemaps: true})
+  return src(path.style.src, {since: lastRun(styles)})
+    .pipe(dest(path.style.dest))
+}
+
+function sass() {
+  return src(path.sass.src, {sourcemaps: true})
     .pipe(sass().on('error', sass.logError))
     .pipe(concat('styles.css', {newLine: ''}))
     .pipe(cleancss())
@@ -69,24 +79,25 @@ function fonts() {
   .pipe(dest(path.fonts.dest))
 }
 
-function browserSync() {
-  browsersync.init({
-    watch: true,
-    server: { baseDir: "./" },
-    port: 3000,
-    files: [path.scripts.dest, path.style.dest]
-})
-}
-
 function watcher () {
   watch(path.style.src, {ignoreInitial: false}, styles)
+  watch(path.sass.src, {ignoreInitial: false}, sass)
   watch(path.scripts.src, {ignoreInitial: false}, scripts)
   watch(path.images.src, {ignoreInitial: false}, images)
   watch(path.fonts.src, {ignoreInitial: false}, fonts)
 }
 
+function browserSync() {
+  browsersync.init({
+    watch: true,
+    server: { baseDir: "./" },
+    port: 3000,
+    files: [path.scripts.dest, path.sass.dest, path.styles.dest]
+})
+}
+
 module.exports = {
-  watch: parallel(browserSync, series(clean, images ,watcher)),
-  build: series(clean, parallel(styles, scripts, images, fonts)),
+  watch: parallel(browserSync, series(clean, watcher)),
+  build: series(clean, parallel(sass, styles, scripts, images, fonts)),
   clean
 }
