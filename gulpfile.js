@@ -81,7 +81,7 @@ function fonts() {
 
 function watcher () {
   watch(path.style.src, {ignoreInitial: false}, styles)
-  watch(path.scss.src, {ignoreInitial: false}, sass)
+  watch(path.scss.src, {ignoreInitial: false}, scss)
   watch(path.scripts.src, {ignoreInitial: false}, scripts)
   watch(path.images.src, {ignoreInitial: false}, images)
   watch(path.fonts.src, {ignoreInitial: false}, fonts)
